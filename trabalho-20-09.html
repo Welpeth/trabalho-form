@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário</title>
+</head>
+<body>
+    <form name="form1" id="form1" action="submit_form.php" method="POST">
+        <label for="name">Nome: </label><br>
+        <input type="text" id="name" name="name" minlength="5" required><br><br>
+
+        <label for="email">Email: </label><br>
+        <input type="email" id="email" name="email" required><br><br>
+
+        <label for="genero"> Gênero:</label> <br><br>
+        <input type="radio" name="genero" value="0"> Masculino
+        <input type="radio" name="genero" value="1"> Feminino
+        <input type="radio" name="genero" value="2"> Outro <br><br>
+
+        <label for="country">País de Origem:</label>
+        <select name="country" id="country" required>
+          <option value=""> </option>
+          <option value="Russia">Russia</option>
+          <option value="Mexico">Mexico</option>
+          <option value="Brasil">Brasil</option>
+        </select> <br><br>
+
+        <label for="cpf"> CPF: </label><br>
+        <input type="text" name="ao_cpf" id="ao_cpf" placeholder="CPF" maxlength="14" onblur="ValidaCPF()" required/> <br><br>
+
+        <label for="interesses"> Interesses:</label> <br><br>
+        <label for="coding">Programar</label>
+        <input type="checkbox" id="coding1" name="interest" value="coding"> 
+
+        <label for="youtube">Assistir youtube</label>
+        <input type="checkbox" id="youtube" name="interest" value="youtube">
+
+        <label for="games">Jogos</label>
+        <input type="checkbox" id="games" name="interest" value="games">
+
+        <label for="crying">Chorar</label>
+        <input type="checkbox" id="crying" name="interest" value="crying"> <br><br>
+
+        <label for="password">Senha: </label> <br>
+        <input type="password" id="password" name="password" minlength="8" required><br><br>
+
+        <label for="confirmPassword">Confirme a Senha: </label> <br>
+        <input type="password" id="confirmPassword" name="confirmPassword" minlength="8" required><br><br>
+
+        <label for="idade">Sua idade: </label> <br>
+        <input type="number" id="age" name="age" required><br><br>
+
+        <label for="biografia">Biografia: </label><br>
+        <textarea></textarea> <br><br>
+
+        <span id="erro" style="color:red; display:none;">Você precisa ter mais de 18 anos para se registrar.</span> <br><br>
+
+        <button type="submit">Enviar</button>
+    </form>
+
+    <script>
+       function ValidaCPF() {
+            var ao_cpf = document.forms.form1.ao_cpf.value;
+            var cpfValido = /^(([0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}))$/;
+
+            if (cpfValido.test(ao_cpf) == false) {
+                ao_cpf = ao_cpf.replace(/\D/g, "");
+
+                if (ao_cpf.length == 11) {
+                    ao_cpf = ao_cpf.replace(/(\d{3})(\d)/, "$1.$2");
+                    ao_cpf = ao_cpf.replace(/(\d{3})(\d)/, "$1.$2");
+                    ao_cpf = ao_cpf.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+
+                    document.getElementById("ao_cpf").value = ao_cpf;
+                    return true; 
+                } else {
+                    alert("CPF inválido");
+                    return false; 
+                }
+            }
+
+            return true;
+        }
+
+        function validarInteresses() {
+            const interests = document.querySelectorAll('input[name="interest"]:checked');
+            if (interests.length < 1) {
+                alert("Você deve selecionar pelo menos 1 interesse.");
+                return false;
+            }
+            return true;
+        }
+
+        function validargenero() {
+            const genero = document.querySelectorAll('input[name="genero"]:checked');
+            if (genero.length < 1) {
+                alert("Você deve selecionar o seu genero");
+                return false;
+            }
+            return true;
+        }
+
+
+        document.getElementById('form1').addEventListener('submit', function(event) {
+            let idade = document.getElementById('age').value;
+            let password = document.getElementById('password').value;
+            let confirmPassword = document.getElementById('confirmPassword').value;
+            let erroElement = document.getElementById('erro');
+            let erros = [];
+
+            if (!ValidaCPF()) {
+            event.preventDefault();
+        }
+
+            if (!ValidaCPF() || !validarInteresses()) {
+            event.preventDefault();
+        }
+
+            if (!validargenero()) {
+            event.preventDefault(); 
+        }
+
+
+        document.getElementById('form1').addEventListener('submit', function(event) {
+            let idade = document.getElementById('age').value;
+            let erroElement = document.getElementById('erro');
+
+            erroElement.style.display = 'none';
+
+            if (!idade || idade <= 0) {
+            alert("Você precisa inserir uma idade válida.");
+            event.preventDefault(); 
+            return;
+            }
+
+            if (idade < 18) {
+            erroElement.style.display = 'block';
+            event.preventDefault();
+            }
+        });
+
+
+          let senha = document.getElementById('password').value;
+            let confirmarSenha = document.getElementById('confirmPassword').value;
+
+            if (senha != confirmarSenha) {
+                alert("As senhas não correspondem.");
+                event.preventDefault();
+            }
+
+        });
+            
+    </script>
+</body>
+</html>
